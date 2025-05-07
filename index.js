@@ -55,6 +55,33 @@ function callApi(endpoint, method = 'GET') {
     .catch(error => { throw error });
 }
 
+function createElement({ tagName, className = '', attributes = {} }) {
+    const element = document.createElement(tagName);
+    element.classList.add(className);
+  
+    Object
+      .keys(attributes) // 🔹 Get array all of keys (property names) from obj attributes. 
+      // If attributes = { id: 'btn', type: 'submit' }, -> Object.keys(attributes) returns ['id', 'type'].
+      .forEach(key => element.setAttribute(key, attributes[key])); // key = 'id'; attributes[key] = 'btn'; ->> element.setAttribute('id', 'btn')
+  
+    return element;
+  }
+
+  function createName(name) {
+    const nameElement = createElement({ tagName: 'span', className: 'name' });
+    nameElement.innerText = name;
+  
+    return nameElement;
+  }
+  
+  function createImage(source) {
+    const attributes = { src: source };
+    const imgElement = createElement({ tagName: 'img', className: 'fighter-image', attributes
+    });
+
+    return imgElement;
+  }
+
 function getFightersNames(fighters) {
   return fighters.map(it => it.name).join('\n');
 }
