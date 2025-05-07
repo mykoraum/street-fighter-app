@@ -82,6 +82,17 @@ function createElement({ tagName, className = '', attributes = {} }) {
     return imgElement;
   }
 
+  function createFighter(fighter) {
+    const { name, source } = fighter;
+    const nameElement = createName(name);
+    const imageElement = createImage(source);
+    const element = createElement({ tagName: 'div', className: 'fighter' });
+  
+    element.append(imageElement, nameElement);
+  
+    return element;
+  }
+
 function getFightersNames(fighters) {
   return fighters.map(it => it.name).join('\n');
 }
