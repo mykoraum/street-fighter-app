@@ -1,8 +1,9 @@
 const BASE_API_URL = 'https://api.github.com/';
 
-const API_URL =
-  "https://api.github.com/repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json";
-const SECURITY_HEADERS = {
+// const API_URL =
+//   "https://api.github.com/repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json";
+
+  const SECURITY_HEADERS = {
   headers: {
     authorization: `token ${GITHUB_TOKEN}`,
   },
@@ -11,12 +12,23 @@ const SECURITY_HEADERS = {
 const rootElement = document.getElementById('root');
 const loadingElement = document.getElementById('loading-overlay');
 
- function startApp() {
-  const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
-  const fightersPromise = callApi(endpoint);
-  fightersPromise.then(fighters =>
-    rootElement.innerText = getFightersNames(fighters)
-  );
+async function startApp() {
+    // const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
+    // const fighters = await callApi(endpoint);
+    // rootElement.innerText = getFightersNames(fighters);
+    try {
+        loadingElement.style.visibility = 'visible';
+    
+        const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
+        const fighters = await callApi(endpoint);
+    
+        rootElement.innerText = getFightersNames(fighters);
+      } catch (error) {
+        console.warn(error);
+        rootElement.innerText = 'Failed to load data';
+      } finally {
+        loadingElement.style.visibility = 'hidden';
+      }
 }
 
 function callApi(endpoint, method = 'GET') {
