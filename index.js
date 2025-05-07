@@ -93,6 +93,16 @@ function createElement({ tagName, className = '', attributes = {} }) {
     return element;
   }
 
+  function createFighters(fighters) {
+    const fighterElements = fighters.map(fighter => createFighter(fighter));
+    const element = createElement({ tagName: 'div', className: 'fighters' });
+  
+    element.append(...fighterElements);
+  
+    return element;
+  }
+  
+
 function getFightersNames(fighters) {
   return fighters.map(it => it.name).join('\n');
 }
