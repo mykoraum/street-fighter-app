@@ -35,16 +35,24 @@ function callApi(endpoint, method = 'GET') {
   const url = BASE_API_URL + endpoint;
   const options = { method, ...SECURITY_HEADERS };
 
-  return fetch(url, options)
-    .then(response => response.ok ? response.json() : Promise.reject(Error('Failed to load')))
+//   return fetch(url, options)
+//     .then(response => response.ok ? response.json() : Promise.reject(Error('Failed to load')))
+//     .then(file => JSON.parse(atob(file.content)))
+//     .catch(error => {
+//       console.warn(error);
+//       rootElement.innerText = 'Failed to load data';
+//     })
+//     .finally(() => {
+//       loadingElement.remove();
+//     });
+    return fetch(url, options)
+    .then(response =>
+      response.ok
+        ? response.json()
+        : Promise.reject(Error('Failed to load'))
+    )
     .then(file => JSON.parse(atob(file.content)))
-    .catch(error => {
-      console.warn(error);
-      rootElement.innerText = 'Failed to load data';
-    })
-    .finally(() => {
-      loadingElement.remove();
-    });
+    .catch(error => { throw error });
 }
 
 function getFightersNames(fighters) {
