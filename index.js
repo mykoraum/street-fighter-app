@@ -12,6 +12,8 @@ const BASE_API_URL = 'https://api.github.com/';
 const rootElement = document.getElementById('root');
 const loadingElement = document.getElementById('loading-overlay');
 
+const fightersDetailsMap = new Map();
+
 async function startApp() {
     // const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
     // const fighters = await callApi(endpoint);
@@ -22,7 +24,9 @@ async function startApp() {
         const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
         const fighters = await callApi(endpoint);
     
-        rootElement.innerText = getFightersNames(fighters);
+        // rootElement.innerText = getFightersNames(fighters);
+        const fightersElement = createFighters(fighters);
+        rootElement.appendChild(fightersElement);
       } catch (error) {
         console.warn(error);
         rootElement.innerText = 'Failed to load data';
@@ -89,6 +93,25 @@ function createElement({ tagName, className = '', attributes = {} }) {
     const element = createElement({ tagName: 'div', className: 'fighter' });
   
     element.append(imageElement, nameElement);
+
+//     element.addEventListener('click', (event) => handleFighterClick(event, 'wrapper'), false)
+//     imageElement.addEventListener('click', (event) => handleFighterClick(event, 'image'), false)
+
+// function handleFighterClick(event, el) {
+//   console.log(el);
+// }
+element.addEventListener('click', (event) => handleFighterClick(event, fighter), false)
+
+function handleFighterClick(event, fighter) {
+  const { _id } = fighter;
+
+  if(!fightersDetailsMap.has(_id)) {
+    // send request here
+    fightersDetailsMap.set(_id, fighter);
+  }
+
+  console.log(fightersDetailsMap.get(_id));
+}
   
     return element;
   }
@@ -97,7 +120,7 @@ function createElement({ tagName, className = '', attributes = {} }) {
     const fighterElements = fighters.map(fighter => createFighter(fighter));
     const element = createElement({ tagName: 'div', className: 'fighters' });
   
-    element.append(...fighterElements);
+    element.append(...fighterElements); // ...“splits” the array into separate arguments.
   
     return element;
   }
