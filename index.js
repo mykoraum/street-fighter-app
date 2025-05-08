@@ -12,29 +12,6 @@ const BASE_API_URL = 'https://api.github.com/';
 const rootElement = document.getElementById('root');
 const loadingElement = document.getElementById('loading-overlay');
 
-const fightersDetailsMap = new Map();
-
-async function startApp() {
-    // const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
-    // const fighters = await callApi(endpoint);
-    // rootElement.innerText = getFightersNames(fighters);
-    try {
-        loadingElement.style.visibility = 'visible';
-    
-        const endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json';
-        const fighters = await callApi(endpoint);
-    
-        // rootElement.innerText = getFightersNames(fighters);
-        const fightersElement = createFighters(fighters);
-        rootElement.appendChild(fightersElement);
-      } catch (error) {
-        console.warn(error);
-        rootElement.innerText = 'Failed to load data';
-      } finally {
-        loadingElement.style.visibility = 'hidden';
-      }
-}
-
 function callApi(endpoint, method = 'GET') {
   const url = BASE_API_URL + endpoint;
   const options = { method, ...SECURITY_HEADERS };
@@ -59,75 +36,17 @@ function callApi(endpoint, method = 'GET') {
     .catch(error => { throw error });
 }
 
-function createElement({ tagName, className = '', attributes = {} }) {
-    const element = document.createElement(tagName);
-    element.classList.add(className);
-  
-    Object
-      .keys(attributes) // 🔹 Get array all of keys (property names) from obj attributes. 
-      // If attributes = { id: 'btn', type: 'submit' }, -> Object.keys(attributes) returns ['id', 'type'].
-      .forEach(key => element.setAttribute(key, attributes[key])); // key = 'id'; attributes[key] = 'btn'; ->> element.setAttribute('id', 'btn')
-  
-    return element;
-  }
+class FighterService {
+    #endpoint = 'repos/oleksandr-danylchenko/street-fighter/contents/resources/api/fighters.json'
+   
+    async getFighters() {
+      try {
+        const apiResult = await callApi(this.#endpoint, 'GET');
+        return JSON.parse(atob(apiResult.content));
+      } catch (error) {
+        throw error;
+      }
+    }
+   }
 
-  function createName(name) {
-    const nameElement = createElement({ tagName: 'span', className: 'name' });
-    nameElement.innerText = name;
-  
-    return nameElement;
-  }
-  
-  function createImage(source) {
-    const attributes = { src: source };
-    const imgElement = createElement({ tagName: 'img', className: 'fighter-image', attributes
-    });
-
-    return imgElement;
-  }
-
-  function createFighter(fighter) {
-    const { name, source } = fighter;
-    const nameElement = createName(name);
-    const imageElement = createImage(source);
-    const element = createElement({ tagName: 'div', className: 'fighter' });
-  
-    element.append(imageElement, nameElement);
-
-//     element.addEventListener('click', (event) => handleFighterClick(event, 'wrapper'), false)
-//     imageElement.addEventListener('click', (event) => handleFighterClick(event, 'image'), false)
-
-// function handleFighterClick(event, el) {
-//   console.log(el);
-// }
-element.addEventListener('click', (event) => handleFighterClick(event, fighter), false)
-
-function handleFighterClick(event, fighter) {
-  const { _id } = fighter;
-
-  if(!fightersDetailsMap.has(_id)) {
-    // send request here
-    fightersDetailsMap.set(_id, fighter);
-  }
-
-  console.log(fightersDetailsMap.get(_id));
-}
-  
-    return element;
-  }
-
-  function createFighters(fighters) {
-    const fighterElements = fighters.map(fighter => createFighter(fighter));
-    const element = createElement({ tagName: 'div', className: 'fighters' });
-  
-    element.append(...fighterElements); // ...“splits” the array into separate arguments.
-  
-    return element;
-  }
-  
-
-function getFightersNames(fighters) {
-  return fighters.map(it => it.name).join('\n');
-}
-
-startApp();
+   const fighterService = new FighterService();
