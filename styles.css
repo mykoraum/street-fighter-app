@@ -1,0 +1,36 @@
+.fighters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 40px;
+}
+
+.fighter {
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    /* border: 1px solid grey; */
+    border-radius: 10px;
+    padding: 10px 15px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.fighter:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+}
+
+.fighter-image {
+    width: 100%;
+    height: 100%;
+}
+
+.name {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
