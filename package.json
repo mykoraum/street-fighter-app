@@ -4,12 +4,13 @@
   "description": "My first personal game called Street Fighter",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+       "build": "babel index.js -d dist"
   },
   "author": "Mykola Haidash",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.1"
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2"
   }
 }
