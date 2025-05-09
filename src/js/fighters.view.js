@@ -1,5 +1,6 @@
 import View from "./view.js";
 import FighterView from "./fighter.view.js";
+import fighterService from "./services/fighter.service.js";
 
 
 class FightersView extends View {
@@ -34,12 +35,27 @@ class FightersView extends View {
       this.element.append(...fighterElements);
     }
   
+    // handleFighterClick(event, fighter) {
+    //   this.fightersDetailsMap.set(fighter._id, fighter);
+    //   console.log("clicked");
+    //   // get from map or load info and add to fightersMap
+    //   // show modal with fighter info
+    //   // allow to edit health and power in this modal
+    // }
     handleFighterClick(event, fighter) {
-      this.fightersDetailsMap.set(fighter._id, fighter);
-      console.log("clicked");
-      // get from map or load info and add to fightersMap
-      // show modal with fighter info
-      // allow to edit health and power in this modal
+      console.log("Click fighter:", fighter.name);
+    
+      fighterService.getFighterInfo(fighter._id)
+        .then(detailedFighter => {
+          console.log("Detailed Info about fighter:", detailedFighter);
+          this.fightersDetailsMap.set(fighter._id, detailedFighter);
+    
+          const previewElement = createFighterPreview(detailedFighter);
+          document.getElementById("root").appendChild(previewElement);
+        })
+        .catch(error => {
+          console.warn("Error:", error);
+        });
     }
   }
 

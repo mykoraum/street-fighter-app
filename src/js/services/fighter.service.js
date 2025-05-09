@@ -12,6 +12,18 @@ class FighterService {
         throw error;
       }
     }
+
+    async getFighterInfo(fighterId) {
+      const endpoint = `repos/oleksandr-danylchenko/street-fighter/contents/resources/api/details/fighter/${fighterId}.json`;
+      console.log("Current endpoint:", endpoint);
+
+      try {
+        const result = await callApi(endpoint, "GET");
+        return result; //JSON object with detailed information about the fighter
+      } catch (error) {
+        throw error;
+      }
+    }
   }
   
   const fighterService = new FighterService(); 
